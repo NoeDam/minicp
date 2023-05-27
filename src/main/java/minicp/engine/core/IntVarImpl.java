@@ -100,7 +100,19 @@ public class IntVarImpl implements IntVar {
      * @param values the initial values in the domain, it must be nonempty
      */
     public IntVarImpl(Solver cp, Set<Integer> values) {
-         throw new NotImplementedException();
+         this.cp = cp;
+        int min = Collections.min(values);
+        int max = Collections.max(values);
+        domain = new SparseSetDomain(cp.getStateManager(), min, max);
+        onDomain = new StateStack<>(cp.getStateManager());
+        onFix = new StateStack<>(cp.getStateManager());
+        onBound = new StateStack<>(cp.getStateManager());
+        for(int i = min; i < max; i++){
+            if(!values.contains(i)){
+                remove(i);
+            }
+        }
+        //throw new NotImplementedException();
     }
 
     @Override
